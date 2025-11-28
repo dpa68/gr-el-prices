@@ -12,7 +12,7 @@
             padding: 10px;
             background: #f0f0f0;
             border-radius: 6px;
-            white-space: pre-wrap;
+            white-space: pre-wrap; /* preserves line breaks */
         }
     </style>
 </head>
@@ -26,11 +26,11 @@
 
         async function loadSchedule() {
             try {
-                const response = await fetch(url + "?t=" + new Date().getTime()); // cache-busting
+                const response = await fetch(url + "?t=" + new Date().getTime());
                 if (!response.ok) throw new Error("Network response was not ok");
                 const text = await response.text();
                 
-                // Only update if content has changed
+                // Only update if content changed
                 if (text !== lastContent) {
                     scheduleBox.textContent = text;
                     lastContent = text;
@@ -44,7 +44,7 @@
         // Initial load
         loadSchedule();
 
-        // Check for updates every 5 seconds
+        // Refresh every 5 seconds
         setInterval(loadSchedule, 5000);
     </script>
 </body>
