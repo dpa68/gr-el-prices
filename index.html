@@ -2,10 +2,39 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Download Excel File</title>
+    <title>Data Portal</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        pre {
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 6px;
+            white-space: pre-wrap;
+        }
+    </style>
 </head>
 <body>
-    <h1>Click here to download the latest Excel file</h1>
+
+    <h1>Download Latest Excel File</h1>
     <a href="gr_el_prices.xlsx" download>Download gr_el_prices.xlsx</a>
+
+    <hr>
+
+    <h2>Schedule</h2>
+    <pre id="schedule-box">Loading schedule…</pre>
+
+    <script>
+        fetch("schedule")
+            .then(r => r.text())
+            .then(text => {
+                document.getElementById("schedule-box").textContent = text;
+            })
+            .catch(err => {
+                document.getElementById("schedule-box").textContent = "Error loading schedule.";
+            });
+    </script>
+
 </body>
 </html>
+
+
