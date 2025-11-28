@@ -2,9 +2,12 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Data Portal</title>
+    <title>Schedule</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 30px; }
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 30px; 
+        }
         pre {
             padding: 10px;
             background: #f0f0f0;
@@ -14,27 +17,35 @@
     </style>
 </head>
 <body>
-
-    <h1>Download Latest Excel File</h1>
-    <a href="gr_el_prices.xlsx" download>Download gr_el_prices.xlsx</a>
-
-    <hr>
-
-    <h2>Schedule</h2>
     <pre id="schedule-box">Loading schedule…</pre>
 
     <script>
-        fetch("schedule")
-            .then(r => r.text())
-            .then(text => {
-                document.getElementById("schedule-box").textContent = text;
-            })
-            .catch(err => {
-                document.getElementById("schedule-box").textContent = "Error loading schedule.";
-            });
-    </script>
+        const scheduleBox = document.getElementById("schedule-box");
+        const url = "https://raw.githubusercontent.com/dpa68/gr-el-prices/main/schedule";
+        let lastContent = "";
 
+        async function loadSchedule() {
+            try {
+                const response = await fetch(url + "?t=" + new Date().getTime()); // cache-busting
+                if (!response.ok) throw new Error("Network response was not ok");
+                const text = await response.text();
+                
+                // Only update if content has changed
+                if (text !== lastContent) {
+                    scheduleBox.textContent = text;
+                    lastContent = text;
+                }
+            } catch (err) {
+                scheduleBox.textContent = "Error loading schedule.";
+                console.error(err);
+            }
+        }
+
+        // Initial load
+        loadSchedule();
+
+        // Check for updates every 5 seconds
+        setInterval(loadSchedule, 5000);
+    </script>
 </body>
 </html>
-
-
